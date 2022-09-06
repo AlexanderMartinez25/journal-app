@@ -4,7 +4,7 @@ import { Google } from "@mui/icons-material"
 import { Grid, Typography, TextField, Button, Link } from "@mui/material"
 import { AuthLayout } from '../layout/AuthLayout'
 import { useForm } from '../../hooks/useForm'
-import { chekingAutentication, checkingCredentials } from '../../store/auth'
+import { chekingAutentication, checkingCredentials, startGoogleSingIn } from '../../store/auth'
 
 export const LoginPage = () => {
 
@@ -24,7 +24,7 @@ export const LoginPage = () => {
 
   const onGoogleSingIn = () => {
     console.log('onGoogleSingIn');
-    dispatch(checkingCredentials());
+    dispatch(startGoogleSingIn());
   }
 
 
