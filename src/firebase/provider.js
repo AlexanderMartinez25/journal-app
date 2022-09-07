@@ -25,6 +25,7 @@ export const signInWidthGoolge = async () => {
 
     return {
       ok: false,
+      errorMessage,
     };
   }
 };
