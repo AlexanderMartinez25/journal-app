@@ -1,4 +1,7 @@
-import { signInWidthGoolge } from "../../firebase/provider";
+import {
+  signInWidthGoolge,
+  registerUserWithEmailPassword,
+} from "../../firebase/provider";
 import { checkingCredentials, logout, login } from "./";
 
 export const chekingAutentication = (email, password) => {
@@ -16,5 +19,23 @@ export const startGoogleSingIn = () => {
     if (!result.ok) return dispatch(logout(result.errorMessage));
 
     dispatch(login(result));
+  };
+};
+
+export const startCreatingUserWithEmailPassword = ({
+  email,
+  password,
+  displayName,
+}) => {
+  return async (dispatch) => {
+    dispatch(checkingCredentials());
+
+    const resp = await registerUserWithEmailPassword({
+      email,
+      password,
+      displayName,
+    });
+
+    console.log(resp);
   };
 };
