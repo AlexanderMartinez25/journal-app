@@ -1,6 +1,7 @@
 import {
   signInWidthGoolge,
   registerUserWithEmailPassword,
+  loginWidthEmailPassword,
 } from "../../firebase/provider";
 import { checkingCredentials, logout, login } from "./";
 
@@ -40,5 +41,16 @@ export const startCreatingUserWithEmailPassword = ({
     if (!ok) return dispatch(logout({ errorMessage }));
 
     dispatch(login({ uid, displayName, email, photoURL }));
+  };
+};
+
+export const startLoginWidthEmailPassword = ({ email, password }) => {
+  return async (dispatch) => {
+    dispatch(checkingCredentials());
+
+    const result = await loginWidthEmailPassword({ email, password });
+    console.log(result);
+    if (!result.ok) return dispatch(logout(result));
+    dispatch(login(result));
   };
 };
