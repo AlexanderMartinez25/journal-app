@@ -2,6 +2,7 @@ import {
   signInWidthGoolge,
   registerUserWithEmailPassword,
   loginWidthEmailPassword,
+  logoutFirebase,
 } from "../../firebase/provider";
 import { checkingCredentials, logout, login } from "./";
 
@@ -52,5 +53,13 @@ export const startLoginWidthEmailPassword = ({ email, password }) => {
     console.log(result);
     if (!result.ok) return dispatch(logout(result));
     dispatch(login(result));
+  };
+};
+
+export const startLogout = () => {
+  return async (dispatch) => {
+    await logoutFirebase();
+
+    dispatch(logout());
   };
 };
