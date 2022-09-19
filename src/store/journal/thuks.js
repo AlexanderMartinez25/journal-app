@@ -4,12 +4,12 @@ import {
   addNewEmptyNote,
   setActiveNote,
   savingNewNote,
+  setPhotosToActiveNote,
   setNotes,
   setSaving,
   updateNote,
 } from "./";
 import { fileUpload, loadNotes } from "../../helpers";
-import { async } from "@firebase/util";
 
 export const startNewNote = () => {
   return async (dispatch, getState) => {
@@ -69,6 +69,16 @@ export const startUploadingFiles = (files = []) => {
     dispatch(setSaving());
     console.log(files);
 
-    await fileUpload(files[0]);
+    // await fileUpload(files[0]);
+    //creando arreglo de promesas
+
+    const fileUploadPromises = [];
+    for (const file of files) {
+      fileUploadPromises.push(fileUpload(file));
+    }
+
+    const photosUrls = await Promise.all(fileUploadPromises);
+
+    dispatch(setPhotosToActiveNote(photosUrls));
   };
 };
