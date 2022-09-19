@@ -1,10 +1,12 @@
+import { deleteDoc, doc } from "firebase/firestore/lite";
+import { FirebaseDB } from "../../firebase/config";
 import {
   signInWidthGoolge,
   registerUserWithEmailPassword,
   loginWidthEmailPassword,
   logoutFirebase,
 } from "../../firebase/provider";
-import { clearNotesLogout } from "../journal";
+import { clearNotesLogout, deleteNoteById } from "../journal";
 import { checkingCredentials, logout, login } from "./";
 
 export const chekingAutentication = (email, password) => {
@@ -62,5 +64,19 @@ export const startLogout = () => {
     await logoutFirebase();
     dispatch(clearNotesLogout());
     dispatch(logout());
+  };
+};
+
+export const startDeletingNote = () => {
+  return async (dispatch, getState) => {
+    const { uid } = getState().auth;
+    const { active: note } = getState().journal;
+
+    //hacer referencia al documento
+    const docRef = doc(FirebaseDB, `${uid}/journal/notes/${note.id}`);
+    //borrar documento
+    await deleteDoc(docRef);
+
+    dispatch(deleteNoteById(note.id));
   };
 };
