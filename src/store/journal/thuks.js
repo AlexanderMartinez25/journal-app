@@ -57,7 +57,6 @@ export const startSaveNote = () => {
 
     // hacer referencia al documento
     const docRef = doc(FirebaseDB, `${uid}/journal/notes/${note.id}`);
-
     await setDoc(docRef, noteToFirestore, { merge: true });
 
     dispatch(updateNote(note));
@@ -71,7 +70,6 @@ export const startUploadingFiles = (files = []) => {
 
     // await fileUpload(files[0]);
     //creando arreglo de promesas
-
     const fileUploadPromises = [];
     for (const file of files) {
       fileUploadPromises.push(fileUpload(file));
