@@ -9,7 +9,7 @@ import {
 import { clearNotesLogout, deleteNoteById } from "../journal";
 import { checkingCredentials, logout, login } from "./";
 
-export const chekingAutentication = (email, password) => {
+export const chekingAutentication = () => {
   return async (dispatch) => {
     dispatch(checkingCredentials());
   };
