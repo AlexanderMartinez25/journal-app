@@ -19,7 +19,6 @@ export const startGoogleSingIn = () => {
   return async (dispatch) => {
     dispatch(checkingCredentials());
     const result = await signInWidthGoolge();
-    console.log({ result });
 
     if (!result.ok) return dispatch(logout(result.errorMessage));
 

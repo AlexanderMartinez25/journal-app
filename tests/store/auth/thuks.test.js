@@ -1,9 +1,16 @@
-import { signInWidthGoolge } from "../../../src/firebase/provider";
+import {
+  loginWidthEmailPassword,
+  logoutFirebase,
+  signInWidthGoolge,
+} from "../../../src/firebase/provider";
 import { checkingCredentials, login, logout } from "../../../src/store/auth";
 import {
   chekingAutentication,
   startGoogleSingIn,
+  startLoginWidthEmailPassword,
+  startLogout,
 } from "../../../src/store/auth/thuks";
+import { clearNotesLogout } from "../../../src/store/journal";
 import { demoUser } from "../../fixtures/authFixtures";
 
 jest.mock("../../../src/firebase/provider");
@@ -38,5 +45,25 @@ describe("Pruebas en AuthThunks", () => {
 
     expect(dispatch).toHaveBeenCalledWith(checkingCredentials());
     expect(dispatch).toHaveBeenCalledWith(logout(loginData.errorMessage));
+  });
+
+  test("startLoginWidthEmailPassword debe de llamar chekingCredentials y login - Exito", async () => {
+    const loginData = { ok: true, ...demoUser };
+    const formData = { email: demoUser.email, password: "12346" };
+
+    await loginWidthEmailPassword.mockResolvedValue(loginData);
+    await startLoginWidthEmailPassword(formData)(dispatch);
+
+    expect(dispatch).toHaveBeenCalledWith(checkingCredentials());
+    expect(dispatch).toHaveBeenCalledWith(login(loginData));
+  });
+
+  test("startLogout debe de llamar logoutFirebase, clearNotes y logout", async () => {
+    await startLogout()(dispatch);
+
+    expect(logoutFirebase).toHaveBeenCalled();
+    expect(dispatch).toHaveBeenCalledWith(clearNotesLogout());
+    expect(dispatch).toHaveBeenCalledWith(clearNotesLogout());
+    expect(dispatch).toHaveBeenCalledWith(logout());
   });
 });
