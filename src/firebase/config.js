@@ -16,6 +16,8 @@ import { getFirestore } from "firebase/firestore/lite";
 //   appId: "1:938292154947:web:a83cd75d1cd851c488faf6",
 // };
 
+console.log(import.meta.env);
+
 //Testing
 const firebaseConfig = {
   apiKey: "AIzaSyDYldhNxYAd5T0ZvZzR-xtMdcXPSw5QTSk",
