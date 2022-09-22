@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore/lite";
+import { getEnviroments } from "../helpers";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -16,7 +17,11 @@ import { getFirestore } from "firebase/firestore/lite";
 //   appId: "1:938292154947:web:a83cd75d1cd851c488faf6",
 // };
 
-console.log(import.meta.env);
+const env = getEnviroments();
+console.log(env);
+
+// console.log(process.env);
+// console.log(import.meta.env);
 
 //Testing
 const firebaseConfig = {
