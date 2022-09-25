@@ -5,7 +5,6 @@ import { MemoryRouter } from "react-router-dom"
 
 import { LoginPage } from "../../../src/auth/pages/LoginPage"
 import { authSlice } from "../../../src/store/auth"
-import { startGoogleSingIn } from "../../../src/store/auth/thuks"
 import { notauthenticatedState } from "../../fixtures/authFixtures"
 
 const mockStartGoogleSingIn = jest.fn();
@@ -37,6 +36,30 @@ describe('Pruebas en  <LoginPage />', () => {
 
     // screen.debug()
     expect(screen.getAllByText('Login').length).toBeGreaterThanOrEqual(1)
+
+  })
+
+  test('submit debe de llama rstartLoginWidthEmailPasswor', () => {
+
+    const email = 'alexander@gmail.com';
+    const password = '123456';
+
+    render(
+      <Provider store={store} >
+        <MemoryRouter>
+          <LoginPage />
+        </MemoryRouter>
+      </Provider>
+    );
+
+    const emailField = screen.getByRole('textbox', { name: 'Correo' });
+    fireEvent.change(emailField, { target: { name: 'email', value: email } });
+
+    const passwordField = screen.getByTestId('password');
+    fireEvent.change(passwordField, { target: { name: 'password', value: password } });
+
+    const loginForm = screen.getByLabelText('submit-form');
+    fireEvent.submit(loginForm)
 
   })
 

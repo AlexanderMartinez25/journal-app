@@ -47,7 +47,6 @@ const firebaseConfig = {
   messagingSenderId: VITE_MESSAGINGSENDERID,
   appId: VITE_APPID,
 };
-console.log(firebaseConfig);
 
 // Initialize Firebase
 export const FirebaseApp = initializeApp(firebaseConfig);
