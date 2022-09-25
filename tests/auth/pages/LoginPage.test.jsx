@@ -1,51 +1,79 @@
-import { fireEvent, render, screen } from "@testing-library/react"
-import { Provider } from "react-redux"
-import { configureStore } from "@reduxjs/toolkit"
-import { MemoryRouter } from "react-router-dom"
+import { fireEvent, render, screen } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import { MemoryRouter } from 'react-router-dom';
 
-import { LoginPage } from "../../../src/auth/pages/LoginPage"
-import { authSlice } from "../../../src/store/auth"
-import { notauthenticatedState } from "../../fixtures/authFixtures"
+import { LoginPage } from '../../../src/auth/pages/LoginPage';
+import { authSlice, } from '../../../src/store/auth';
+import { startGoogleSignIn } from '../../../src/store/auth/thuks';
+import { notAuthenticatedState } from '../../fixtures/authFixtures';
+const mockStartGoogleSignIn = jest.fn();
+const mockStartLoginWidthEmailPassword = jest.fn();
 
-const mockStartGoogleSingIn = jest.fn();
+jest.mock('../../../src/store/auth/thuks', () => ({
+  startGoogleSingIn: () => mockStartGoogleSignIn,
+  startLoginWidthEmailPassword: ({ email, password }) => {
+    return () => mockStartLoginWidthEmailPassword({ email, password });
+  },
+}));
 
-jest.mock('../../../src/store/auth/thuks'), () => ({
-  //ejecuetar funcion al thunk startGoogleSingIn
-  startGoogleSingIn: () => mockStartGoogleSingIn
-})
+jest.mock('react-redux', () => ({
+  ...jest.requireActual('react-redux'),
+  useDispatch: () => (fn) => fn(),
+}));
 
 const store = configureStore({
   reducer: {
     auth: authSlice.reducer
   },
-  proloadedState: {
-    auth: notauthenticatedState
+  preloadedState: {
+    auth: notAuthenticatedState
   }
 })
 
-describe('Pruebas en  <LoginPage />', () => {
+describe('Pruebas en <LoginPage />', () => {
+
+  beforeEach(() => jest.clearAllMocks());
+
   test('debe de mostrar el componente correctamente', () => {
 
     render(
-      <Provider store={store} >
+      <Provider store={store}>
         <MemoryRouter>
           <LoginPage />
         </MemoryRouter>
       </Provider>
-    )
+    );
 
     // screen.debug()
-    expect(screen.getAllByText('Login').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('Login').length).toBeGreaterThanOrEqual(1);
+  });
 
-  })
 
-  test('submit debe de llama rstartLoginWidthEmailPasswor', () => {
+  test('boton de google debe de llamar el startGoogleSignIn', () => {
 
-    const email = 'alexander@gmail.com';
+    render(
+      <Provider store={store}>
+        <MemoryRouter>
+          <LoginPage />
+        </MemoryRouter>
+      </Provider>
+    );
+
+    const googleBtn = screen.getByLabelText('google-btn');
+    fireEvent.click(googleBtn);
+    expect(mockStartGoogleSignIn).toHaveBeenCalled();
+
+  });
+
+
+  test('submit debe de llamar startLoginWidthEmailPassword', () => {
+
+    const email = 'fernando@google.com';
     const password = '123456';
 
     render(
-      <Provider store={store} >
+      <Provider store={store}>
         <MemoryRouter>
           <LoginPage />
         </MemoryRouter>
@@ -59,23 +87,12 @@ describe('Pruebas en  <LoginPage />', () => {
     fireEvent.change(passwordField, { target: { name: 'password', value: password } });
 
     const loginForm = screen.getByLabelText('submit-form');
-    fireEvent.submit(loginForm)
+    fireEvent.submit(loginForm);
 
-  })
 
-  test('botón de google debe de llamar el startGoogleSignIn', () => {
-    render(
-      <Provider store={store} >
-        <MemoryRouter>
-          <LoginPage />
-        </MemoryRouter>
-      </Provider>
-    );
-
-    const googleBtn = screen.getByLabelText('google-btn');
-    fireEvent.click(googleBtn);
-    expect(mockStartGoogleSingIn).toHaveBeenCalled();
-
-  })
-
-})
+    expect(mockStartLoginWidthEmailPassword).toHaveBeenCalledWith({
+      email: email,
+      password: password
+    })
+  });
+});

@@ -19,9 +19,7 @@ export const LoginPage = () => {
   const isAuthenticated = useMemo(() => status === 'checking', [status])
 
   const dispatch = useDispatch();
-
   const { email, password, onInputChange } = useForm(formData)
-
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -37,7 +35,7 @@ export const LoginPage = () => {
 
   return (
     <AuthLayout title="Login">
-      <form aria-label='form' className="animate__animated animate__fadeIn animate__faster" onSubmit={onSubmit}>
+      <form aria-label='submit-form' className="animate__animated animate__fadeIn animate__faster" onSubmit={onSubmit}>
         <Grid container>
           <Grid item xs={12} sx={{ mt: 2 }}>
             <TextField
